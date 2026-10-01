@@ -256,8 +256,8 @@ block-beta
     
         block:AlgoBody
             rsa["RSA\n0x1205"]
-            sha2_256["SHA2-256\n0x12"]
             len["256-bytes\n0x0100"]
+            sha2_256["SHA2-256\n0x12"]
         end
     end
     
@@ -284,6 +284,8 @@ block-beta
     style dag_cbor width:250;
 ```
 
+Encoded as bytes (each segment as an [LEB128] unsigned varint): `34 01 85 24 80 02 12 71`
+
 A (canonicalized) [JWT] signed with [ES256K] is as follows:
 
 ```mermaid
@@ -308,8 +310,8 @@ block-beta
     
         block:AlgoBody
             ecdsa["ECDSA\n0xEC"]
-            curve["secp256r1\n0x1200"]
-            sha2_256["Keccak-256\n0x1B"]
+            curve["secp256k1\n0xE7"]
+            sha2_256["SHA2-256\n0x12"]
         end
     end
     
@@ -336,6 +338,8 @@ block-beta
     style ecdsa width:110;
     style jwt width:350;
 ```
+
+Encoded as bytes (each segment as an [LEB128] unsigned varint): `34 01 EC 01 E7 01 12 F7 D4 01`
 
 ## Prefix
 
@@ -365,7 +369,7 @@ varsig-signature-algorithm
   = %xB1   bls-public-key-curve multihash-header ; BLS
   / %xEC   ecdsa-curve          multihash-header ; ECDSA
   / %xED   eddsa-curve          multihash-header ; EdDSA
-  / %x1205 rsa-size             multihash-header ; RSASSA-PKCS #1 v1.5
+  / %x1205 rsa-byte-length      multihash-header ; RSASSA-PKCS #1 v1.5
 ```
 
 </details>
@@ -380,6 +384,7 @@ Canonical encodings are convenient for many applications since they allow for ef
 | `0x71`   | `0x71`          | [DAG-CBOR]                                      |
 | `0x0129` | `0xa902`        | [DAG-JSON]                                      |
 | `0xE191` | `0x91c303`      | [EIP-191 "personal sign"][EIP-191-ps]           |
+| `0x6A77` | `0xf7d401`      | [JWT]                                           |
 
 <details>
 
@@ -391,6 +396,7 @@ varsig-encoding-metadata
   / %x71                        ; DAG-CBOR multicodec prefix
   / %x0129                      ; DAG-JSON multicodec prefix
   / %xE191 varsig-encoding-info ; EIP-191 "personal sign"
+  / %x6A77                      ; JWT
 ```
 
 </details>
