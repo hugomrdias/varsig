@@ -1,4 +1,4 @@
-# Varsig Specification v1.0.0
+# Varsig Specification v1.0.1
 
 ## Editors
 
